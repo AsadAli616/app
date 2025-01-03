@@ -1,7 +1,9 @@
+import { useNavigation } from "@react-navigation/native";
 import { Link } from "expo-router";
 import { ImageBackground, Pressable, TextInput, Text, View, StyleSheet } from "react-native";
 
 export default function Home() {
+  const navigation = useNavigation()
   return (
     <>
       <ImageBackground
@@ -52,9 +54,11 @@ export default function Home() {
 </Link>
 
           {/* Pressable Button */}
-          <Pressable style={styles.button}>
+          
+          <Pressable style={styles.button} onPress={()=> navigation.navigate("(tabs)")}>
             <Text style={styles.buttonText}>Login</Text>
           </Pressable>
+   
         </View>
       </ImageBackground>
     </>
