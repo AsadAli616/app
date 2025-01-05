@@ -1,12 +1,8 @@
-import { StyleSheet,Dimensions,FlatList ,Image, Platform, SafeAreaView, View, Text, ImageBackground, Pressable } from 'react-native';
-
-import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+import React, { useState } from 'react';
+import { StyleSheet, Dimensions, FlatList, Image, Platform, SafeAreaView, View, Text, ImageBackground, Pressable, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Link } from 'expo-router';
+
 const DATA = [
   { id: '1', title: 'Item 1' },
   { id: '2', title: 'Item 2' },
@@ -19,88 +15,87 @@ const DATA = [
   { id: '9', title: 'Item 3' },
   { id: '10', title: 'Item 2' },
   { id: '11', title: 'Item 3' },
-
-
-
 ];
+
 export default function TabTwoScreen() {
-  const {width ,height } = Dimensions.get("screen")
-  const navigation = useNavigation()
-const render =()=>(
-  
-  <Pressable 
-  // onPressIn={()=>{}}
-  // onPressOut={()=>{}}
+  const { width, height } = Dimensions.get("screen");
+  const [selectedItem, setSelectedItem] = useState(null); // Track selected item
+  const navigation = useNavigation();
 
+  const renderItem = ({ item }) => (
+    <Link href={"/details/3"}    style={{
+      marginTop: 10,
+      width: width / 1.1,
+      height: height / 10,
+      borderRadius: 10,
+      backgroundColor: selectedItem === item.id ? 'blue' : 'white', // Change color based on selection
+    }}>
 
-  style={{
-    marginTop:10,
-    // borderColor:"black",
-    // borderWidth:2,
-    width:width/1.1,
-    height:height/10,
-    borderRadius:10,
-   backgroundColor:"white",
-   shadowOffset: { width: 0, height: 6 },
-   shadowOpacity: 0.3,
-   shadowRadius: 10,
-   elevation: 10,
+    <Pressable
+      // onPress={() => setSelectedItem(item.id)}
+      onPressIn={()=>{setSelectedItem(item.id)}}
+      onPressOut={()=>{setSelectedItem(null)}}
    
-   }} 
-  
-  >
-  <View 
-  >
-   <Text>asad</Text>
- </View>
- </Pressable>)
-
+    >
+      <View>
+        <Text style={{ color: selectedItem === item.id ? 'white' : 'black' }}>{item.title}</Text>
+      </View>
+     
+    </Pressable>
+    </Link>
+  );
 
   return (
     <ImageBackground
-    source={require("@/assets/images/Grid.png")}
-    style={styles.imageBackground}
-    
+      source={require('@/assets/images/Grid.png')}
+      style={styles.imageBackground}
     >
- <SafeAreaView style={{
-  borderColor:"black",
-  borderWidth:2,
-  width:width,
-  height:height,
-  display:"flex",
-  alignItems:"center"
-}}>
-  <View
-    style={{
-      marginTop:50,
-      marginBottom:30,
-    }}>
-    <Text
-     style={{
-      fontSize:32,
+      <SafeAreaView style={{
+        borderColor: "black",
+        borderWidth: 2,
+        width: width,
+        height: height,
+        display: "flex",
+        alignItems: "center"
+      }}>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+        >
+          <View
+            style={{
+              marginTop: 50,
+              marginBottom: 30,
+            }}>
+          
 
-    }}>
-      Order
-    </Text>
-  </View>
- 
-
-
-
-
-  <FlatList
-        data={DATA}
-        renderItem={render}
-        keyExtractor={(item) => item.id} // Unique key for each item
-        showsVerticalScrollIndicator={false} // Disable vertical scrollbar
-        showsHorizontalScrollIndicator={false} // Disable horizontal scrollbar
-      />
-
-
- </SafeAreaView>
- </ImageBackground>
+            <FlatList
+            ListHeaderComponent={
+              <View
+                style={{
+                  marginTop: 50,
+                  marginBottom: 30,
+                  alignItems: 'center',
+                }}>
+                <Text style={{ fontSize: 32 }}>
+                  Order
+                </Text>
+              </View>
+            }
+            
+              data={DATA}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id} // Unique key for each item
+              showsVerticalScrollIndicator={false} // Disable vertical scrollbar
+              showsHorizontalScrollIndicator={false} // Disable horizontal scrollbar
+            />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
+
 const styles = StyleSheet.create({
   imageBackground: {
     width: "100%",
@@ -108,5 +103,4 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
   },
-
 });
