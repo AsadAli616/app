@@ -70,10 +70,10 @@ const OrderDetailScreen = () => {
             </Link>
           </View>
 
-          <View style={styles.customerInfo}>
+          {/* <View style={styles.customerInfo}>
             <Text style={styles.customerName}>{orderData.customerName}</Text>
             <Text style={styles.address}>{orderData.address}</Text>
-          </View>
+          </View> */}
 
           <FlatList
             data={orderData.items}
@@ -88,9 +88,7 @@ const OrderDetailScreen = () => {
           </View>
 
           <TouchableOpacity style={styles.completeButton}>
-            <View>
-              <Text>Home screen</Text>
-            </View>
+        
             <Text style={styles.completeButtonText}>Start Delivery</Text>
           </TouchableOpacity>
         </View>
@@ -184,7 +182,7 @@ const styles = StyleSheet.create({
     color: '#FF6700',
   },
   completeButton: {
-    backgroundColor: '#2ecc71',
+    backgroundColor: '#FF6700',
     padding: 16,
     alignItems: 'center',
     marginTop: 8,

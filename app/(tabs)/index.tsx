@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, Dimensions, FlatList, Image, Platform, SafeAreaView, View, Text, ImageBackground, Pressable, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, Dimensions, FlatList, ImageBackground, SafeAreaView, Text, View, Pressable, ScrollView } from 'react-native';
 import { Link } from 'expo-router';
+import MapView from 'react-native-maps';
+
 
 const DATA = [
   { id: '1', title: 'Item 1' },
@@ -20,28 +21,18 @@ const DATA = [
 export default function TabTwoScreen() {
   const { width, height } = Dimensions.get("screen");
   const [selectedItem, setSelectedItem] = useState(null); // Track selected item
-  const navigation = useNavigation();
 
   const renderItem = ({ item }) => (
-    <Link href={"/details/3"}    style={{
-      marginTop: 10,
-      width: width / 1.1,
-      height: height / 10,
-      borderRadius: 10,
-      backgroundColor: selectedItem === item.id ? 'blue' : 'white', // Change color based on selection
-    }}>
-
-    <Pressable
-      // onPress={() => setSelectedItem(item.id)}
-      onPressIn={()=>{setSelectedItem(item.id)}}
-      onPressOut={()=>{setSelectedItem(null)}}
-   
-    >
-      <View>
-        <Text style={{ color: selectedItem === item.id ? 'white' : 'black' }}>{item.title}</Text>
-      </View>
-     
-    </Pressable>
+    <Link href={`/details/3`} style={[styles.itemContainer, { backgroundColor: selectedItem === item.id ? '#007BFF' : 'white' }]}>
+      <Pressable
+        onPressIn={() => setSelectedItem(item.id)}
+        onPressOut={() => setSelectedItem(null)}
+        style={styles.itemPressable}
+      >
+        <Text style={[styles.itemText, { color: selectedItem === item.id ? 'white' : 'black' }]}>
+          {item.title}
+        </Text>
+      </Pressable>
     </Link>
   );
 
@@ -50,46 +41,19 @@ export default function TabTwoScreen() {
       source={require('@/assets/images/Grid.png')}
       style={styles.imageBackground}
     >
-      <SafeAreaView style={{
-        borderColor: "black",
-        borderWidth: 2,
-        width: width,
-        height: height,
-        display: "flex",
-        alignItems: "center"
-      }}>
-        <ScrollView
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-        >
-          <View
-            style={{
-              marginTop: 50,
-              marginBottom: 30,
-            }}>
-          
-
-            <FlatList
-            ListHeaderComponent={
-              <View
-                style={{
-                  marginTop: 50,
-                  marginBottom: 30,
-                  alignItems: 'center',
-                }}>
-                <Text style={{ fontSize: 32 }}>
-                  Order
-                </Text>
-              </View>
-            }
-            
-              data={DATA}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id} // Unique key for each item
-              showsVerticalScrollIndicator={false} // Disable vertical scrollbar
-              showsHorizontalScrollIndicator={false} // Disable horizontal scrollbar
-            />
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.headerText}>Order</Text>
           </View>
+
+          <FlatList
+            data={DATA}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.flatListContent}
+            showsVerticalScrollIndicator={false}
+          />
         </ScrollView>
       </SafeAreaView>
     </ImageBackground>
@@ -98,9 +62,47 @@ export default function TabTwoScreen() {
 
 const styles = StyleSheet.create({
   imageBackground: {
-    width: "100%",
-    height: "100%",
-    borderColor: "black",
-    borderWidth: 1,
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  safeArea: {
+    flex: 1,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+  },
+  headerContainer: {
+    marginTop: 50,
+    marginBottom: 30,
+    alignItems: 'center',
+  },
+  headerText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  flatListContent: {
+    paddingBottom: 50, // Add some padding at the bottom of the list for better spacing
+  },
+  itemContainer: {
+    marginVertical: 10,
+    borderRadius: 10,
+    padding: 15,
+    width: '100%',
+    alignItems: 'center',
+    elevation: 3, // Adding shadow for a more elevated look
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+  },
+  itemPressable: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  itemText: {
+    fontSize: 18,
+    fontWeight: '600',
   },
 });

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View  ,Platform  } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 
 
+
 export default function Modal() {
   const isPresented = router.canGoBack();
 
@@ -11,6 +12,7 @@ export default function Modal() {
       <Text>Modal screen</Text>
       {!isPresented && <Link href="../">Dismiss modal</Link>}
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+
      
     </View>
   );
@@ -22,4 +24,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  
+
 });
